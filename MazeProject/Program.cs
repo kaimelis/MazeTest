@@ -1,102 +1,106 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MazeProject
 {
     class Program
     {
-
-        int _currentPositionY, _currentPositionX;
-        bool _hasMoved = false;
-
+        private int _currentPositionY, _currentPositionX;
+        private bool _hasMoved = false;
+       
+       
         static void Main(string[] args)
         {
+            Program mazeProg = new Program();
             int[,] mazeArray = new int[,]
             {
             { 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1},
-            { 0, 0, 0, 1, 1, 0, 1, 1, 1, 1},
+            { 0, 0, 0, 1, 0, 0, 1, 1, 1, 1},
             { 1, 1, 0, 0, 1, 0, 1, 1, 1, 1},
-            { 1, 1, 1, 0, 0, 0, 0, 0, 2, 1},
+            { 1, 1, 1, 0, 0, 0, 0, 0, 1, 1},
             { 1, 1, 1, 0, 1, 1, 0, 1, 0, 1},
             { 1, 1, 1, 0, 1, 1, 0, 0, 0, 1},
-            { 1, 1, 1, 0, 1, 1, 1, 1, 1, 1},
+            { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1},
             { 1, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-            { 1, 1, 1, 1, 1, 1, 1, 0, 1, 1},
+            { 1, 1, 1, 1, 1, 1, 2, 0, 1, 1},
             { 1, 1, 1, 1, 1, 1, 1, 0, 1, 1},
             };
 
-            Program mazeProg = new Program();
-            mazeProg.CheckPath(mazeArray);
+            try
+            {   // Open the text file using a stream reader.
+                using (StreamReader sr = new StreamReader("RPAMaze.txt"))
+                {
+                    // Read the stream to a string, and write the string to the console.
+                    String line = sr.ReadToEnd();
+                    Console.WriteLine(line);
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
 
-
-
+         //   mazeProg.FindPath(mazeArray);
         }
+
         //Go recursively till exit is found
-         void CheckPath(int [,] mazeArray)
+         void FindPath(int [,] mazeArray)
         {
             Display(mazeArray);
-            Console.WriteLine("Current position is " + currentPositionY + ";" + currentPositionX);
+            Console.WriteLine("Current position is [" + currentPositionY + "," + currentPositionX + "]");
             Console.WriteLine();
             for (int high = 0; high <= mazeArray.GetUpperBound(0); ++high)
             {
                 for (int row = 0; row <= mazeArray.GetUpperBound(1); ++row)
                 {
-                    //check up if can move
-                    if (high == currentPositionY - 1 && row == currentPositionX && mazeArray[high, row] == 0)
+                    if (mazeArray[high, row] == 0)
                     {
-                        Console.WriteLine("Found a way to go UP " + high + ";" + row);
-                        mazeArray[high, row] = 2;
-
-                        //Updating current position to the new moved one
-                        currentPositionY = high;
-                        currentPositionX = row;
-
-                        Console.WriteLine("New position is " + currentPositionY + ";" + currentPositionX);
-                        CheckPath(mazeArray);
+                        //check up if can move
+                        if (high == currentPositionY - 1 && row == currentPositionX)
+                        {
+                            Console.WriteLine("Found a path UP");
+                            UpdatePosition(mazeArray, high, row);
+                        }
+                        //check right if can move
+                        if (high == currentPositionY && row == currentPositionX + 1 )
+                        {
+                            Console.WriteLine("Found a path RIGHT");
+                            UpdatePosition(mazeArray, high, row);
+                        }
+                        //check left if can move
+                        if (high == currentPositionY && row == currentPositionX - 1 )
+                        {
+                            Console.WriteLine("Found a path LEFT");
+                            UpdatePosition(mazeArray, high, row);
+                        }
+                        //check down if can move
+                        if (high == currentPositionY + 1 && row == currentPositionX )
+                        {
+                            Console.WriteLine("Found a path DOWN");
+                            UpdatePosition(mazeArray, high, row);
+                        }
                     }
-                    //check right if can move
-                    else if (high == currentPositionY && row == currentPositionX + 1 && mazeArray[high, row] == 0)
-                    {
-                        Console.WriteLine("Found a way to go RIGHT " + high + ";" + row);
-                        mazeArray[high, row] = 2;
-
-                        //Updating current position to the new moved one
-                        currentPositionY = high;
-                        currentPositionX = row;
-
-                        Console.WriteLine("New position is " + currentPositionY + ";" + currentPositionX);
-                        CheckPath(mazeArray);
-                    }
-                    //check left if can move
-                    else if (high == currentPositionY && row == currentPositionX - 1 && mazeArray[high, row] == 0)
-                    {
-                        Console.WriteLine("Found a way to go LEFT " + high + ";" + row);
-                        mazeArray[high, row] = 2;
-
-                        //Updating current position to the new moved one
-                        currentPositionY = high;
-                        currentPositionX = row;
-
-                        Console.WriteLine("New position is " + currentPositionY + ";" + currentPositionX);
-                        CheckPath(mazeArray);
-                    }
-                    //check down if can move
-                    else if (high == currentPositionY + 1 && row == currentPositionX && mazeArray[high, row] == 0)
-                    {
-                        Console.WriteLine("Found a way to go DOWN " + high + ";" + row);
-                        mazeArray[high, row] = 2;
-
-                        //Updating current position to the new moved one
-                        currentPositionY = high;
-                        currentPositionX = row;
-
-                        Console.WriteLine("New position is " + currentPositionY + ";" + currentPositionX);
-                        CheckPath(mazeArray);
-                    }
+                    //if there is nothing on the left side
+                    //else if (mazeArray[high, row] == 2)
+                    //{
+                    //    Console.WriteLine("Need to go back");
+                    //}
                 }
             }
         }
 
+        void UpdatePosition(int[,] mazeArray, int high, int row)
+        {
+            //move the player
+            mazeArray[high, row] = 2;
+            //Updating current position to the new moved one
+            currentPositionY = high;
+            currentPositionX = row;
+
+            FindPath(mazeArray);
+        }
 
         void Display(int[,] array)
         {
@@ -115,7 +119,7 @@ namespace MazeProject
                         {
                             currentPositionY = y;
                             currentPositionX = x;
-                                                        _hasMoved = true;
+                            _hasMoved = true;
                         }
                     }
                     else
@@ -129,6 +133,36 @@ namespace MazeProject
             }
         }
 
+
+        int[,] CreateArray(string data)
+        {
+            int[,] array = new int[10,10];
+            int i = 0, j = 0;
+
+            foreach (string line in data.Split(new string[1] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if ((IsNumeric(line) && (line.Trim().Length > 0))) // If valid numeric line and not empty line
+                {
+                    j = 0;
+                    foreach (string number in line.Split(' '))
+                        if (!string.IsNullOrEmpty(number))
+                            array[i, j++] = int.Parse(number);
+
+                    i++;
+                }
+            }
+
+            return array;
+        }
+
+        private bool IsNumeric(string line)
+        {
+            foreach (char c in line)
+                if (!"0123456789 ".Contains(c))
+                    return false;
+
+            return true;
+        }
 
         int currentPositionY
         {
