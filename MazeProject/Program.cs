@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace MazeProject
@@ -9,40 +8,28 @@ namespace MazeProject
         private int _currentPositionY, _currentPositionX;
         private bool _hasMoved = false;
        
-       
         static void Main(string[] args)
         {
             Program mazeProg = new Program();
-            int[,] mazeArray = new int[,]
-            {
-            { 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1},
-            { 0, 0, 0, 1, 0, 0, 1, 1, 1, 1},
-            { 1, 1, 0, 0, 1, 0, 1, 1, 1, 1},
-            { 1, 1, 1, 0, 0, 0, 0, 0, 1, 1},
-            { 1, 1, 1, 0, 1, 1, 0, 1, 0, 1},
-            { 1, 1, 1, 0, 1, 1, 0, 0, 0, 1},
-            { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1},
-            { 1, 0, 0, 0, 0, 0, 0, 0, 1, 1},
-            { 1, 1, 1, 1, 1, 1, 2, 0, 1, 1},
-            { 1, 1, 1, 1, 1, 1, 1, 0, 1, 1},
-            };
-
             try
-            {   // Open the text file using a stream reader.
+            { 
                 using (StreamReader sr = new StreamReader("RPAMaze.txt"))
                 {
-                    // Read the stream to a string, and write the string to the console.
-                    String line = sr.ReadToEnd();
-                    Console.WriteLine(line);
+                    string firstLine = sr.ReadLine();
+                    string line = "";
+                    while (sr.Peek() != -1)
+                    {
+                        line = sr.ReadToEnd();
+                    }
+
+                    int [,]mazeArray = mazeProg.CreateArray(line,10,10);
+                    mazeProg.FindPath(mazeArray);
                 }
             }
             catch (IOException e)
             {
-                Console.WriteLine("The file could not be read:");
                 Console.WriteLine(e.Message);
             }
-
-         //   mazeProg.FindPath(mazeArray);
         }
 
         //Go recursively till exit is found
@@ -60,35 +47,32 @@ namespace MazeProject
                         //check up if can move
                         if (high == currentPositionY - 1 && row == currentPositionX)
                         {
-                            Console.WriteLine("Found a path UP");
+                            Console.WriteLine("Moved UP");
                             UpdatePosition(mazeArray, high, row);
                         }
                         //check right if can move
                         if (high == currentPositionY && row == currentPositionX + 1 )
                         {
-                            Console.WriteLine("Found a path RIGHT");
+                            Console.WriteLine("Moved RIGHT");
                             UpdatePosition(mazeArray, high, row);
                         }
                         //check left if can move
                         if (high == currentPositionY && row == currentPositionX - 1 )
                         {
-                            Console.WriteLine("Found a path LEFT");
+                            Console.WriteLine("Moved LEFT");
                             UpdatePosition(mazeArray, high, row);
                         }
                         //check down if can move
                         if (high == currentPositionY + 1 && row == currentPositionX )
                         {
-                            Console.WriteLine("Found a path DOWN");
-                            UpdatePosition(mazeArray, high, row);
+                            Console.WriteLine("Moved DOWN");
+                           UpdatePosition(mazeArray, high, row);
                         }
+
+                       // UpdatePosition(mazeArray, high, row);
                     }
-                    //if there is nothing on the left side
-                    //else if (mazeArray[high, row] == 2)
-                    //{
-                    //    Console.WriteLine("Need to go back");
-                    //}
                 }
-            }
+            }           
         }
 
         void UpdatePosition(int[,] mazeArray, int high, int row)
@@ -133,25 +117,27 @@ namespace MazeProject
             }
         }
 
-
-        int[,] CreateArray(string data)
+        int[,] CreateArray(string data,int sizeX, int sizeY)
         {
-            int[,] array = new int[10,10];
-            int i = 0, j = 0;
+            int[,] array = new int[sizeX, sizeY];
+            int x = 0;
+            int y = 0;
 
             foreach (string line in data.Split(new string[1] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
             {
-                if ((IsNumeric(line) && (line.Trim().Length > 0))) // If valid numeric line and not empty line
+                if (IsNumeric(line) && (line.Trim().Length > 0))
                 {
-                    j = 0;
+                    y = 0;
                     foreach (string number in line.Split(' '))
+                    {
                         if (!string.IsNullOrEmpty(number))
-                            array[i, j++] = int.Parse(number);
-
-                    i++;
+                        {
+                            array[x, y++] = int.Parse(number);
+                        }
+                    }
+                    x++;
                 }
             }
-
             return array;
         }
 
