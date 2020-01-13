@@ -101,7 +101,7 @@ namespace MazeProject
         }
 
         /// <summary>
-        /// 
+        /// Function that updates the current position and updates the path
         /// </summary>
         /// <param MazeArrayData="mazeArray"> </param>
         /// <param Columns="high"> </param>
@@ -114,13 +114,15 @@ namespace MazeProject
             CurrentPositionY = high;
             CurrentPositionX = row;
 
+            //find path again
             FindPath(mazeArray);
         }
 
         /// <summary>
-        /// 
+        /// A function that display the maze in the console.
+        /// 2 is shown in red.
         /// </summary>
-        /// <param name="array"></param>
+        /// <param name="array">maze array. To know what to display</param>
         private void Display(int[,] array)
         {
             for (int y = 0; y <= array.GetUpperBound(0); y++)
@@ -134,6 +136,7 @@ namespace MazeProject
                         Console.Write(" ");
                         Console.ResetColor();
 
+                        //Before solving the maze need to find current position and then ignore it with a bool
                         if(!_hasMoved)
                         {
                             CurrentPositionY = y;
@@ -152,11 +155,11 @@ namespace MazeProject
         }
 
         /// <summary>
-        /// 
+        /// A funtion that creates an array from string data
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="sizeX"></param>
-        /// <param name="sizeY"></param>
+        /// <param FileInfo="data"></param>
+        /// <param ArraySizeX="sizeX"></param>
+        /// <param ArraySizeY="sizeY"></param>
         /// <returns></returns>
         private int[,] CreateArray(string data,int sizeX, int sizeY)
         {
@@ -166,6 +169,7 @@ namespace MazeProject
 
             foreach (string line in data.Split(new string[1] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
             {
+                //Need to check if data given contains only numbers
                 if (IsNumeric(line) && (line.Trim().Length > 0))
                 {
                     y = 0;
@@ -183,7 +187,7 @@ namespace MazeProject
         }
 
         /// <summary>
-        /// 
+        /// Help function that checks if string contains numbers
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
@@ -197,7 +201,7 @@ namespace MazeProject
         }
 
         /// <summary>
-        /// 
+        /// Getter and setter for currentPosition Y
         /// </summary>
         private int CurrentPositionY
         {
@@ -206,7 +210,7 @@ namespace MazeProject
         }
 
         /// <summary>
-        /// 
+        /// Getter and setter for currentPosition X
         /// </summary>
         private int CurrentPositionX
         {
