@@ -13,9 +13,23 @@ namespace MazeProject
         /// </summary>
         private int _currentPositionY, _currentPositionX;
         /// <summary>
+        /// Array size that is read from the file
+        /// </summary>
+        private int _arraySizeX, _arraySizeY;
+        /// <summary>
         /// A bool that shows if the first move was done.
         /// </summary>
         private bool _hasMoved = false;
+
+        /// <summary>
+        /// holds all information that needs to be writen to the file
+        /// </summary>
+        private string writeTrail;
+
+        /// <summary>
+        /// A bool that checks if the maze solver found the solution
+        /// </summary>
+        private bool _hasFinished = false;
        
         /// <summary>
         /// Main function that runs the main loop
@@ -31,6 +45,8 @@ namespace MazeProject
                 {
                     //Reading first line of the file and storing it.
                     string firstLine = sr.ReadLine();
+                    string[] arraySize = firstLine.Split(' ');
+                    int[] convertedSize = Array.ConvertAll<string, int>(arraySize, int.Parse);
                     //Loop that reads the maze file but skips the first line.
                     string line = "";
                     while (sr.Peek() != -1)
@@ -39,10 +55,11 @@ namespace MazeProject
                     }
 
                     //creating the maze array that was given in a file
-                    int [,]mazeArray = mazeProg.CreateArray(line,20,20);
+                    int [,]mazeArray = mazeProg.CreateArray(line, convertedSize[0], convertedSize[1]);
 
                     //finding a path in a maze. Recursive method.
                     mazeProg.FindPath(mazeArray);
+                    mazeProg.CreateTrailFile();
                 }
             }
             catch (IOException e)
@@ -62,6 +79,7 @@ namespace MazeProject
             Display(mazeArray);
             Console.WriteLine("Current position is [" + CurrentPositionY + "," + CurrentPositionX + "]");
             Console.WriteLine();
+            writeTrail += "\n";
             //going through array first is the columns
             for (int high = 0; high <= mazeArray.GetUpperBound(0); ++high)
             {
@@ -74,30 +92,34 @@ namespace MazeProject
                         //check up if the player can move
                         if (high == CurrentPositionY - 1 && row == CurrentPositionX)
                         {
-                            Console.WriteLine("Moved UP");
+                            Console.WriteLine("Moved UP to coordinates [" + high + "," + row + "]");
+                            writeTrail += "Player Moved UP to coordinates [" + high + "," + row + "]";
                             UpdatePosition(mazeArray, high, row);
                         }
                         //check right if the player can move
                         if (high == CurrentPositionY && row == CurrentPositionX + 1 )
                         {
-                            Console.WriteLine("Moved RIGHT");
+                            Console.WriteLine("Moved RIGHT [" + high + "," + row + "]");
+                            writeTrail += "Player Moved RIGHT to coordinates [" + high + "," + row + "]";
                             UpdatePosition(mazeArray, high, row);
                         }
                         //check left if the player can move
                         if (high == CurrentPositionY && row == CurrentPositionX - 1 )
                         {
-                            Console.WriteLine("Moved LEFT");
+                            Console.WriteLine("Moved LEFT [" + high + "," + row + "]");
+                            writeTrail += "Player Moved LEFT to coordinates [" + high + "," + row + "]";
                             UpdatePosition(mazeArray, high, row);
                         }
                         //check down if the player can move
                         if (high == CurrentPositionY + 1 && row == CurrentPositionX )
                         {
-                           Console.WriteLine("Moved DOWN");
-                           UpdatePosition(mazeArray, high, row);
+                            Console.WriteLine("Moved DOWN [" + high + "," + row + "]");
+                            writeTrail += "Player Moved DOWN to coordinates [" + high + "," + row + "]";
+                            UpdatePosition(mazeArray, high, row);
                         }
                     }
                 }
-            }           
+            }
         }
 
         /// <summary>
@@ -116,6 +138,15 @@ namespace MazeProject
 
             //find path again
             FindPath(mazeArray);
+
+            if ((CurrentPositionX == 0 || CurrentPositionX == _arraySizeX || CurrentPositionY == 0 || CurrentPositionY == _arraySizeY) && !_hasFinished)
+            {
+                _hasFinished = true;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Exit was found at coordinates [" + CurrentPositionY + "," + CurrentPositionX + "]");
+                Console.ResetColor();
+                GetFinalMaze(mazeArray);
+            }
         }
 
         /// <summary>
@@ -139,6 +170,7 @@ namespace MazeProject
                         //Before solving the maze need to find current position and then ignore it with a bool
                         if(!_hasMoved)
                         {
+                            writeTrail += "Players starting position is [" + y + "," + x + "]";
                             CurrentPositionY = y;
                             CurrentPositionX = x;
                             _hasMoved = true;
@@ -166,6 +198,8 @@ namespace MazeProject
             int[,] array = new int[sizeX, sizeY];
             int x = 0;
             int y = 0;
+            _arraySizeX = sizeX;
+            _arraySizeY = sizeY;
 
             foreach (string line in data.Split(new string[1] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -184,6 +218,38 @@ namespace MazeProject
                 }
             }
             return array;
+        }
+
+        private void GetFinalMaze(int[,] mazeArray)
+        {
+            writeTrail += "\n";
+            for (int y = 0; y <= mazeArray.GetUpperBound(0); y++)
+            {
+                for (int x = 0; x <= mazeArray.GetUpperBound(1); x++)
+                {
+                        writeTrail += mazeArray[y, x] + " ";
+                }
+                writeTrail += "\n";
+            }
+        }
+
+        /// <summary>
+        /// Function that creates a file and writes the maze solver logic
+        /// </summary>
+        private void CreateTrailFile()
+        {
+            try
+            {
+                //Writting the trail into file
+                using (StreamWriter file = new StreamWriter("../../../Log.txt"))
+                {
+                    file.Write(writeTrail);
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         /// <summary>
