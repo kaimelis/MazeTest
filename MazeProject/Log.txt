@@ -1,13 +1,11 @@
-Players starting position is [3,18]
-Player Moved LEFT to coordinates [3,17]
-Player Moved LEFT to coordinates [3,16]
-Player Moved LEFT to coordinates [3,15]
-Player Moved UP to coordinates [2,15]
-Player Moved UP to coordinates [1,15]
-Player Moved DOWN to coordinates [2,15]
-Player Moved DOWN to coordinates [3,15]
-Player Moved LEFT to coordinates [3,14]
-Player Moved LEFT to coordinates [3,13]
+Players starting position is [9,14]
+Player Moved LEFT to coordinates [9,13]
+Player Moved UP to coordinates [8,13]
+Player Moved UP to coordinates [7,13]
+Player Moved UP to coordinates [6,13]
+Player Moved UP to coordinates [5,13]
+Player Moved UP to coordinates [4,13]
+Player Moved UP to coordinates [3,13]
 Player Moved UP to coordinates [2,13]
 Player Moved LEFT to coordinates [2,12]
 Player Moved UP to coordinates [1,12]
@@ -33,21 +31,21 @@ Player Moved LEFT to coordinates [1,1]
 Player Moved LEFT to coordinates [1,0]
 
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-2 2 2 1 1 2 1 2 2 2 2 2 2 1 1 2 1 1 1 1 
-1 1 2 2 1 2 1 2 1 1 1 1 2 2 1 2 1 1 1 1 
-1 1 1 2 2 2 2 2 1 1 1 1 1 2 2 2 2 2 2 1 
-1 1 1 0 1 1 0 1 0 1 1 1 1 0 1 1 0 1 0 1 
-1 1 1 0 1 1 0 0 0 1 1 1 1 0 1 1 0 0 0 1 
-1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 0 1 1 1 
-1 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 1 1 
-1 1 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 0 1 1 
-1 1 1 1 1 1 1 0 1 1 1 0 0 0 1 1 1 0 1 1 
+2 2 2 1 1 2 1 2 2 2 2 2 2 1 1 0 1 1 1 1 
+1 1 2 2 1 2 1 2 1 1 1 1 2 2 1 0 1 1 1 1 
+1 0 0 2 2 2 2 2 1 1 1 1 1 2 0 0 0 0 0 1 
+1 1 1 0 1 1 0 1 0 1 1 1 1 2 1 1 0 1 0 1 
+1 1 1 0 1 1 0 0 0 1 1 1 1 2 1 1 0 0 0 1 
+1 1 1 0 1 1 1 1 1 1 1 1 1 2 1 1 0 1 1 1 
+1 0 0 0 0 0 0 0 1 1 1 0 0 2 0 0 0 0 0 1 
+1 1 1 1 1 1 1 0 1 1 1 1 1 2 1 1 1 0 1 1 
+1 1 1 1 1 1 1 0 0 0 0 0 0 2 2 1 1 0 1 1 
 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 
 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 
 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 
 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 
 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 
-1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 
+1 1 1 1 1 1 0 0 0 0 1 1 1 1 1 1 1 0 1 1 
 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 
 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 
 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 0 1 1 

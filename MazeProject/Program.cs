@@ -57,7 +57,10 @@ namespace MazeProject
                     //creating the maze array that was given in a file
                     int [,]mazeArray = mazeProg.CreateArray(line, convertedSize[0], convertedSize[1]);
 
+
+
                     //finding a path in a maze. Recursive method.
+                    //mazeProg.FindPath(mazeProg.DefineStartPosition(mazeArray));
                     mazeProg.FindPath(mazeArray);
                     mazeProg.CreateTrailFile();
                 }
@@ -75,6 +78,8 @@ namespace MazeProject
         /// <param name="mazeArray">Two dimensional array that gets the newest version of the maze</param>
         private void FindPath(int [,] mazeArray)
         {
+            if (mazeArray == null)
+                return;
             //Display the newest maze version with visual path
             Display(mazeArray);
             Console.WriteLine("Current position is [" + CurrentPositionY + "," + CurrentPositionX + "]");
@@ -130,15 +135,15 @@ namespace MazeProject
         /// <param Rows="row"> </param>
        private void UpdatePosition(int[,] mazeArray, int high, int row)
         {
+            if (mazeArray == null)
+                return;
+
             //move the player
             mazeArray[high, row] = 2;
             //Updating current position to the new moved one
             CurrentPositionY = high;
             CurrentPositionX = row;
-
-            //find path again
             FindPath(mazeArray);
-
             if ((CurrentPositionX == 0 || CurrentPositionX == _arraySizeX || CurrentPositionY == 0 || CurrentPositionY == _arraySizeY) && !_hasFinished)
             {
                 _hasFinished = true;
@@ -146,6 +151,7 @@ namespace MazeProject
                 Console.WriteLine("Exit was found at coordinates [" + CurrentPositionY + "," + CurrentPositionX + "]");
                 Console.ResetColor();
                 GetFinalMaze(mazeArray);
+                return;
             }
         }
 
@@ -156,25 +162,29 @@ namespace MazeProject
         /// <param name="array">maze array. To know what to display</param>
         private void Display(int[,] array)
         {
+            if (array == null)
+                return;
             for (int y = 0; y <= array.GetUpperBound(0); y++)
             {
                 for (int x = 0; x <= array.GetUpperBound(1); x++)
                 {
                     if(array[y,x] == 2)
                     {
+                        //Before solving the maze need to find current position and then ignore it with a bool
+                        if (!_hasMoved)
+                        {
+                            _hasMoved = true;
+                            CurrentPositionY = y;
+                            CurrentPositionX = x;
+                            writeTrail += "Players starting position is [" + CurrentPositionY + "," + CurrentPositionX + "]";
+                        }
+
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write(array[y, x]);
                         Console.Write(" ");
                         Console.ResetColor();
 
-                        //Before solving the maze need to find current position and then ignore it with a bool
-                        if(!_hasMoved)
-                        {
-                            writeTrail += "Players starting position is [" + y + "," + x + "]";
-                            CurrentPositionY = y;
-                            CurrentPositionX = x;
-                            _hasMoved = true;
-                        }
+                       
                     }
                     else
                     {
@@ -222,6 +232,8 @@ namespace MazeProject
 
         private void GetFinalMaze(int[,] mazeArray)
         {
+            if (mazeArray == null)
+                return;
             writeTrail += "\n";
             for (int y = 0; y <= mazeArray.GetUpperBound(0); y++)
             {
